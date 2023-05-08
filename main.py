@@ -1,7 +1,6 @@
 from PPlay.window import *
 from PPlay.sprite import *
 from PPlay.gameimage import *
-from PPlay.keyboard import *
 import random
 
 #inicialização
