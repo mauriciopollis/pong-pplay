@@ -21,6 +21,7 @@ vel_pad = 400
 placar_esquerda = 0
 placar_direita = 0
 pausa = True
+incremento_vel_x_bola = 500
 
 #game loop
 while(True):
@@ -45,10 +46,10 @@ while(True):
     #colisão da bola com os pads
     if(bola.collided(pad_esquerda)):
         bola.x = pad_esquerda.x + pad_esquerda.width
-        vel_x_bola = -vel_x_bola
+        vel_x_bola = -vel_x_bola + incremento_vel_x_bola
     if(bola.collided(pad_direita)):
         bola.x = pad_direita.x - bola.width
-        vel_x_bola = -vel_x_bola
+        vel_x_bola = -(vel_x_bola + incremento_vel_x_bola)
 
     #colisão dos pads com os limites horizontais da janela
     if(pad_esquerda.y<0):
@@ -104,4 +105,6 @@ while(True):
     bola.draw()
     janela.draw_text(str(placar_esquerda), janela.width/2 - 20, 20, 30, color=(255,0,0))
     janela.draw_text(str(placar_direita), janela.width/2 + 20, 20, 30, color=(255,0,0))
+    janela.draw_text("vel_x_bola: " + str(vel_x_bola), 20, 20, 30, color=(255,0,0))
+    janela.draw_text("vel_y_bola: " + str(vel_y_bola), 20, 50, 30, color=(255,0,0))
     janela.update()
