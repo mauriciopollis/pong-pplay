@@ -5,6 +5,7 @@ import random
 
 #inicialização
 janela = Window(1280,720)
+teclado = janela.get_keyboard()
 bola = Sprite("assets/bola_terra_pequena.png",1)
 pad_esquerda = Sprite("assets/pad_imagem_reduzida.png", 1)
 pad_direita = Sprite("assets/pad_imagem_reduzida.png", 1)
@@ -14,6 +15,8 @@ pad_esquerda.set_position(5, janela.height/2 - pad_esquerda.height/2)
 pad_direita.set_position(janela.width - 5 - pad_direita.width, janela.height/2 - pad_direita.height/2)
 vel_x = random.randrange(1000)
 vel_y = random.randrange(1000)
+vel_pad_esquerda = 0
+vel_pad_direita = 0
 
 #game loop
 while(True):
@@ -23,7 +26,10 @@ while(True):
     dt = janela.delta_time()
     bola.x += vel_x * dt
     bola.y += vel_y * dt
+    pad_direita.y += vel_pad_direita * dt
+    pad_esquerda.y += vel_pad_esquerda *dt
 
+    #colisão da bola com as paredes sem patinação
     if(bola.x<0):
         bola.x = 0
         vel_x = -vel_x
@@ -36,11 +42,21 @@ while(True):
     if((bola.y+bola.width)>janela.height):
         bola.y = janela.height - bola.width
         vel_y = -vel_y
-    #if(bola.x<0 or (bola.x+bola.width)>janela.width):
-    #    vel_x = -vel_x
-    #if(bola.y<0 or (bola.y+bola.height)>janela.height):
-    #    vel_y = -vel_y
-          
+
+    if(teclado.key_pressed("DOWN")):
+        vel_pad_direita = 200
+    elif(teclado.key_pressed("UP")):
+        vel_pad_direita = -200
+    else:
+        vel_pad_direita = 0
+    
+    if(teclado.key_pressed("S")):
+        vel_pad_esquerda = 200
+    elif(teclado.key_pressed("W")):
+        vel_pad_esquerda = -200
+    else:
+        vel_pad_esquerda = 0
+
     #desenho
     fundo.draw()
     pad_esquerda.draw()
