@@ -81,17 +81,10 @@ while(True):
     if(bola.x<0):
         placar_esquerda += 1
         bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
-        vel_x = 0
-        vel_y = 0
-        if(teclado.key_pressed("SPACE")):
-            vel_x = random.randrange(1000)
-            vel_y = random.randrange(1000)
 
     if((bola.x + bola.width)>janela.width):
         placar_direita += 1
-        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
-        vel_x = 0
-        vel_y = 0        
+        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)        
 
     #desenho
     fundo.draw()
