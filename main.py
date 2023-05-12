@@ -84,7 +84,7 @@ while(True):
     #incrementa o placar e redefine a posição da bola e sua velocidade
     if((bola.x+bola.width)<0):
         pausa = True
-        placar_esquerda += 1
+        placar_direita += 1
         bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
         vel_x_bola = random.randrange(1000)
         vel_y_bola = random.randrange(1000)
@@ -97,6 +97,8 @@ while(True):
     
     if(teclado.key_pressed("SPACE")):
         pausa = False
+    if(teclado.key_pressed("p")):
+        pausa = True
         
     #desenho
     fundo.draw()
