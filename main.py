@@ -17,6 +17,9 @@ vel_x = random.randrange(1000)
 vel_y = random.randrange(1000)
 vel_pad_esquerda = 0
 vel_pad_direita = 0
+vel_pad = 400
+placar_direita = 0
+placar_esquerda = 0
 
 #game loop
 while(True):
@@ -30,12 +33,6 @@ while(True):
     pad_esquerda.y += vel_pad_esquerda *dt
 
     #colisão da bola com as paredes sem patinação
-    if(bola.x<0):
-        bola.x = 0
-        vel_x = -vel_x
-    if((bola.x+bola.width)>janela.width):
-        bola.x = janela.width - bola.width
-        vel_x = -vel_x
     if(bola.y<0):
         bola.y = 0
         vel_y = -vel_y
@@ -43,23 +40,64 @@ while(True):
         bola.y = janela.height - bola.width
         vel_y = -vel_y
 
+    #movimento dos pads
     if(teclado.key_pressed("DOWN")):
-        vel_pad_direita = 200
+        vel_pad_direita = vel_pad
     elif(teclado.key_pressed("UP")):
-        vel_pad_direita = -200
+        vel_pad_direita = -vel_pad
     else:
         vel_pad_direita = 0
     
     if(teclado.key_pressed("S")):
-        vel_pad_esquerda = 200
+        vel_pad_esquerda = vel_pad
     elif(teclado.key_pressed("W")):
-        vel_pad_esquerda = -200
+        vel_pad_esquerda = -vel_pad
     else:
         vel_pad_esquerda = 0
+
+    #colisão da bola com os pads
+    if(bola.collided(pad_esquerda)):
+        bola.x = pad_esquerda.x + pad_esquerda.width
+        vel_x = -vel_x
+    if(bola.collided(pad_direita)):
+        bola.x = pad_direita.x - bola.width
+        vel_x = -vel_x
+
+    #colisão dos pads com os limites superior e inferior da janela
+    if(pad_esquerda.y<0):
+        pad_esquerda.y = 1
+        vel_pad_esquerda = 0
+    if((pad_esquerda.y + pad_esquerda.height)>janela.height):
+        pad_esquerda.y = janela.height - pad_esquerda.height - 1
+        vel_pad_esquerda = 0
+    if(pad_direita.y<0):
+        pad_direita.y = 1
+        vel_pad_direita = 0
+    if((pad_direita.y + pad_direita.height)>janela.height):
+        pad_direita.y = janela.height - pad_direita.height - 1
+        vel_pad_direita = 0
+
+    #alteração do placar
+    if(bola.x<0):
+        placar_esquerda += 1
+        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
+        vel_x = 0
+        vel_y = 0
+        if(teclado.key_pressed("SPACE")):
+            vel_x = random.randrange(1000)
+            vel_y = random.randrange(1000)
+
+    if((bola.x + bola.width)>janela.width):
+        placar_direita += 1
+        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
+        vel_x = 0
+        vel_y = 0        
 
     #desenho
     fundo.draw()
     pad_esquerda.draw()
     pad_direita.draw()
     bola.draw()
+    janela.draw_text(str(placar_esquerda), janela.width/2 - 20, 20, size=30, color=(255,0,0))
+    janela.draw_text(str(placar_direita), janela.width/2 + 20, 20, size=30, color=(255,0,0))
     janela.update()
