@@ -6,8 +6,12 @@ import random
 #inicialização
 janela = Window(1280,720)
 bola = Sprite("assets/bola_terra_pequena.png",1)
+pad_esquerda = Sprite("assets/pad_imagem_reduzida.png", 1)
+pad_direita = Sprite("assets/pad_imagem_reduzida.png", 1)
 fundo = GameImage("assets/fundo_astronauta.jpg")
 bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
+pad_esquerda.set_position(5, janela.height/2 - pad_esquerda.height/2)
+pad_direita.set_position(janela.width - 5 - pad_direita.width, janela.height/2 - pad_direita.height/2)
 vel_x = random.randrange(1000)
 vel_y = random.randrange(1000)
 
@@ -39,5 +43,7 @@ while(True):
           
     #desenho
     fundo.draw()
+    pad_esquerda.draw()
+    pad_direita.draw()
     bola.draw()
     janela.update()
