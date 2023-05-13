@@ -111,4 +111,5 @@ while(True):
     janela.draw_text(str(placar_direita), janela.width/2 + 20, 20, 30, color=(255,0,0))
     janela.draw_text("vel_x_bola: " + str(vel_x_bola), 20, 20, 30, color=(255,0,0))
     janela.draw_text("vel_y_bola: " + str(vel_y_bola), 20, 50, 30, color=(255,0,0))
+    janela.draw_text(str(dt), 20, janela.height - 50, 30, color=(255,0,0))
     janela.update()
