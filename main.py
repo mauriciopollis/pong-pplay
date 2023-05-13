@@ -13,15 +13,15 @@ fundo = GameImage("assets/fundo_astronauta.jpg")
 bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
 pad_esquerda.set_position(5, janela.height/2 - pad_direita.height/2)
 pad_direita.set_position(janela.width - pad_esquerda.width - 5, janela.height/2 - pad_esquerda.height/2)
-vel_x_bola = random.randrange(1000)
-vel_y_bola = random.randrange(1000)
+vel_x_bola = random.randrange(100)
+vel_y_bola = random.randrange(100)
 vel_pad_direita = 0
 vel_pad_esquerda = 0
 vel_pad = 400
 placar_esquerda = 0
 placar_direita = 0
 pausa = True
-incremento_vel_x_bola = 500
+incremento_vel_x_bola = 50
 
 #game loop
 while(True):
@@ -47,9 +47,11 @@ while(True):
     if(bola.collided(pad_esquerda)):
         bola.x = pad_esquerda.x + pad_esquerda.width
         vel_x_bola = -vel_x_bola + incremento_vel_x_bola
+        vel_y_bola = vel_y_bola + vel_pad_esquerda
     if(bola.collided(pad_direita)):
         bola.x = pad_direita.x - bola.width
         vel_x_bola = -(vel_x_bola + incremento_vel_x_bola)
+        vel_y_bola = vel_y_bola + vel_pad_direita
 
     #colisão dos pads com os limites horizontais da janela
     if(pad_esquerda.y<0):
@@ -86,14 +88,14 @@ while(True):
         pausa = True
         placar_direita += 1
         bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
-        vel_x_bola = random.randrange(1000)
-        vel_y_bola = random.randrange(1000)
+        vel_x_bola = random.randrange(100)
+        vel_y_bola = random.randrange(100)
     if(bola.x>janela.width):
         pausa = True
         placar_esquerda += 1
         bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
-        vel_x_bola = -random.randrange(1000)
-        vel_y_bola = random.randrange(1000)
+        vel_x_bola = -random.randrange(100)
+        vel_y_bola = random.randrange(100)
     
     if(teclado.key_pressed("SPACE")):
         pausa = False
