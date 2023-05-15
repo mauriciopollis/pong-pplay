@@ -13,8 +13,8 @@ fundo = GameImage("assets/fundo_astronauta.jpg")
 bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
 pad_esquerda.set_position(5, janela.height/2 - pad_direita.height/2)
 pad_direita.set_position(janela.width - pad_esquerda.width - 5, janela.height/2 - pad_esquerda.height/2)
-vel_x_bola = random.randrange(100)
-vel_y_bola = random.randrange(100)
+vel_x_bola = random.randrange(500)
+vel_y_bola = random.randrange(500)
 vel_pad_direita = 0
 vel_pad_esquerda = 0
 vel_pad = 400
@@ -22,6 +22,12 @@ placar_esquerda = 0
 placar_direita = 0
 pausa = True
 incremento_vel_x_bola = 50
+janela.delta_time()
+fps = 0
+contador_frames = 0
+tempo_segundos = 0
+mostra_fps = True
+mostra_velocidades = False
 
 #game loop
 while(True):
@@ -101,7 +107,20 @@ while(True):
         pausa = False
     if(teclado.key_pressed("p")):
         pausa = True
-        
+
+    tempo_segundos += dt
+    contador_frames += 1
+    if(tempo_segundos>=1):
+        fps = contador_frames
+        tempo_segundos = 0
+        contador_frames = 0
+
+    #controla a impressão das componentes de velocidade da bola e do fps
+    if(teclado.key_pressed('f')):
+        mostra_fps = not mostra_fps
+    if(teclado.key_pressed('v')):
+        mostra_velocidades = not mostra_velocidades
+
     #desenho
     fundo.draw()
     pad_direita.draw()
@@ -109,7 +128,9 @@ while(True):
     bola.draw()
     janela.draw_text(str(placar_esquerda), janela.width/2 - 20, 20, 30, color=(255,0,0))
     janela.draw_text(str(placar_direita), janela.width/2 + 20, 20, 30, color=(255,0,0))
-    janela.draw_text("vel_x_bola: " + str(vel_x_bola), 20, 20, 30, color=(255,0,0))
-    janela.draw_text("vel_y_bola: " + str(vel_y_bola), 20, 50, 30, color=(255,0,0))
-    janela.draw_text(str(dt), 20, janela.height - 50, 30, color=(255,0,0))
+    if(mostra_velocidades):
+        janela.draw_text("vel_x_bola: " + str(vel_x_bola), 20, 20, 30, color=(255,0,0))
+        janela.draw_text("vel_y_bola: " + str(vel_y_bola), 20, 50, 30, color=(255,0,0))
+    if(mostra_fps):
+        janela.draw_text(str(fps), 20, janela.height - 50, 30, color=(255,0,0))
     janela.update()
