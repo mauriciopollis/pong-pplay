@@ -17,9 +17,14 @@ vel_x = random.randrange(1000)
 vel_y = random.randrange(1000)
 vel_pad_esquerda = 0
 vel_pad_direita = 0
-vel_pad = 400
+vel_pad_ia = 200
+vel_pad_player = 400
 placar_direita = 0
 placar_esquerda = 0
+pause = True
+
+imagem_pad_reduzida_metade = "assets/pad_imagem_reduzida_metade.png"
+ultimo_gol_sofrido = ""
 
 #game loop
 while(True):
@@ -27,10 +32,11 @@ while(True):
     
     #atualização de game objects
     dt = janela.delta_time()
-    bola.x += vel_x * dt
-    bola.y += vel_y * dt
-    pad_direita.y += vel_pad_direita * dt
-    pad_esquerda.y += vel_pad_esquerda *dt
+    if(not pause):
+        bola.x += vel_x * dt
+        bola.y += vel_y * dt
+        pad_direita.y += vel_pad_direita * dt
+        pad_esquerda.y += vel_pad_esquerda *dt
 
     #colisão da bola com as paredes sem patinação
     if(bola.y<0):
@@ -42,26 +48,38 @@ while(True):
 
     #movimento dos pads
     if(teclado.key_pressed("DOWN")):
-        vel_pad_direita = vel_pad
+        vel_pad_direita = vel_pad_player
     elif(teclado.key_pressed("UP")):
-        vel_pad_direita = -vel_pad
+        vel_pad_direita = -vel_pad_player
     else:
         vel_pad_direita = 0
     
+    """
     if(teclado.key_pressed("S")):
         vel_pad_esquerda = vel_pad
     elif(teclado.key_pressed("W")):
         vel_pad_esquerda = -vel_pad
     else:
         vel_pad_esquerda = 0
+    """
 
-    #colisão da bola com os pads
+    #movimento do pad da ia
+    if(vel_y>0):
+        vel_pad_esquerda = vel_pad_ia
+    elif(vel_y == 0):
+        vel_pad_esquerda = 0
+    else:
+        vel_pad_esquerda = -vel_pad_ia
+        
+    #colisão da bola com os pads com transferência de velocidade vertical para a bola
     if(bola.collided(pad_esquerda)):
         bola.x = pad_esquerda.x + pad_esquerda.width
         vel_x = -vel_x
+        vel_y += vel_pad_esquerda
     if(bola.collided(pad_direita)):
         bola.x = pad_direita.x - bola.width
         vel_x = -vel_x
+        vel_y += vel_pad_direita
 
     #colisão dos pads com os limites superior e inferior da janela
     if(pad_esquerda.y<0):
@@ -80,11 +98,30 @@ while(True):
     #alteração do placar
     if(bola.x<0):
         placar_esquerda += 1
+        pad_direita = Sprite("assets/pad_imagem_reduzida.png", 1)
+        pad_esquerda = Sprite("assets/pad_imagem_reduzida_metade.png", 1)
+        pad_esquerda.set_position(5, janela.height/2 - pad_esquerda.height/2)
+        pad_direita.set_position(janela.width - 5 - pad_direita.width, janela.height/2 - pad_direita.height/2)
         bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
+        pause = True
+        vel_x = random.randrange(1000)
+        vel_y = random.randrange(1000)
 
     if((bola.x + bola.width)>janela.width):
         placar_direita += 1
-        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)        
+        ultimo_gol_sofrido = "direita"
+        pad_direita = Sprite("assets/pad_imagem_reduzida_metade.png", 1)
+        pad_esquerda = Sprite("assets/pad_imagem_reduzida.png", 1)
+        pad_esquerda.set_position(5, janela.height/2 - pad_esquerda.height/2)
+        pad_direita.set_position(janela.width - 5 - pad_direita.width, janela.height/2 - pad_direita.height/2)
+        bola.set_position(janela.width/2 - bola.width /2, janela.height/2 - bola.height/2)
+        pause = True
+        vel_x = -random.randrange(1000)
+        vel_y = random.randrange(1000)
+        
+    #pause
+    if(teclado.key_pressed("SPACE")):
+        pause = False        
 
     #desenho
     fundo.draw()
